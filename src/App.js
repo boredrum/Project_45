@@ -5,30 +5,29 @@ function App () {
     coffe: 0,
     sugar: 0,
   });
-  const [tooLow, setTooLow] = useState(false);
 
   const addCoffe = () => setProducts((prevState) => {
     return {
       ...prevState,
-      coffe: prevState.coffe + 1
+      coffe: ++prevState.coffe
     }
   });
   const addSugar = () => setProducts((prevState) => {
     return {
       ...prevState,
-      sugar: prevState.sugar + 1
+      sugar: ++prevState.sugar
     }
   });
-  const removeCoffe = () => tooLow ? false : setProducts((prevState) => {
+  const removeCoffe = () => products.coffe == 0 ? false : setProducts((prevState) => {
     return {
       ...prevState,
-      coffe: prevState.coffe - 1
+      coffe: --prevState.coffe
     }
   });
-  const removeSugar = () => tooLow ? false : setProducts((prevState) => {
+  const removeSugar = () => products.sugar == 0 ? false : setProducts((prevState) => {
     return {
       ...prevState,
-      sugar: prevState.sugar - 1
+      sugar: --prevState.sugar
     }
   });
 
@@ -61,8 +60,18 @@ function App () {
     }
   }, []);
 
-  useEffect(()=>{setTooLow(products.coffe == 0)}, [products.coffe]);
-  useEffect(()=>{setTooLow(products.sugar == 0)}, [products.sugar]);
+  useEffect(()=>{
+    if (products.coffe == 0){
+      document.getElementById("rmCoffe").hidden = true
+    }else{
+      document.getElementById("rmCoffe").hidden = false
+    }
+    if (products.sugar == 0){
+      document.getElementById("rmSugar").hidden = true
+    }else{
+      document.getElementById("rmSugar").hidden = false
+    }
+  })
 
   return (
     <div className="wrapper">
@@ -71,12 +80,12 @@ function App () {
         <div className='product'>
         <span>{`Coffe: ${products.coffe}`}</span>
         <button onClick={addCoffe}>Add</button>
-        <button onClick={removeCoffe}>Remove</button>
+        <button id="rmCoffe" onClick={removeCoffe}>Remove</button>
         </div>
         <div className='product'>
         <span>{`Sugar: ${products.sugar}`}</span>
           <button onClick={addSugar}>Add</button>
-          <button onClick={removeSugar}>Remove</button>
+          <button id="rmSugar" onClick={removeSugar}>Remove</button>
         </div>
         <div className='save'>
             <button onClick={save}>SAVE</button>
